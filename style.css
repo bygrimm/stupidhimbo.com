@@ -110,6 +110,10 @@ body {
   line-height: 1.6;
   font-weight: 300;
 }
+.header .blurb .blurb-meta {
+  display: inline-block;
+  margin-top: 0.4rem;
+}
 
 /* section label */
 .subhead {
