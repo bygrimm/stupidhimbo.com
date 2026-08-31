@@ -127,15 +127,6 @@ body {
 /* link list */
 .link-list { list-style: none; }
 
-/* center the elsewhere list like the grid */
-.link-list .link-item {
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  border-left: none;
-}
-.link-list .url-link { align-items: center; }
-
 /* blog grid — 3 columns */
 .blog-grid {
   list-style: none;
@@ -169,7 +160,7 @@ body {
   margin-top: 0.15rem;
 }
 /* center the lone 7th blog in the middle column */
-.blog-grid .link-item:last-child {
+.blog-grid .link-item:nth-child(7) {
   grid-column: 2;
 }
 @media (max-width: 480px) {
