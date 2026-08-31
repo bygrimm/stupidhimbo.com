@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@300;400;600&family=Jacquarda+Bastarda+9&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --card-bg: #0f120f;
+  --card-border: #1a221a;
+  --accent: #737434;
+  --text: #c8d4c8;
+  --text-muted: #898b6f;
+  --text-dim: #6f795d;
+  --body-font: 'Inter', sans-serif;
+  --mono-font: 'IBM Plex Mono', monospace;
+  --grad-start: #7f8c3b;
+  --grad-end: #51581d;
+  --card-w: 520px;
+  --hdr-size: 2.8rem;
+  --body-size: 0.8rem;
+  --small-size: 0.6rem;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body-font);
+  font-weight: 300;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  max-width: var(--card-w);
+  width: 100%;
+  padding: 3rem 2rem 2rem;
+  position: relative;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--card-bg) 0px, var(--card-bg) 3px, transparent 3px, transparent 5px);
+}
+.card::before { top: -2px; }
+.card::after { bottom: -2px; }
+
+/* header */
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 1.4rem;
+}
+.header .today-label {
+  font-family: var(--mono-font);
+  font-size: var(--small-size);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+.header .title {
+  font-family: 'Jacquarda Bastarda 9', serif;
+  font-size: var(--hdr-size);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.header .title .accent { color: var(--accent); }
+.header .title .rest {
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header .blurb {
+  font-size: var(--body-size);
+  color: var(--text-muted);
+  margin-top: 0.9rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* section label */
+.subhead {
+  font-family: var(--mono-font);
+  font-size: var(--small-size);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #181818;
+}
+.subhead + .link-list { margin-bottom: 1.5rem; }
+
+/* link list */
+.link-list { list-style: none; }
+
+.link-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.25rem;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: var(--body-size);
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(0.05s * var(--i, 0));
+}
+.link-item:hover {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.url-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.url-link .url-text {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-family: var(--mono-font);
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+.url-link .url-text .accent { color: var(--accent); }
+.url-link .muse-text {
+  font-weight: 300;
+  font-size: calc(var(--body-size) * 0.8);
+  color: var(--text-dim);
+  margin-top: 0.1rem;
+  transition: opacity 0.2s;
+}
+.url-link:hover .url-text { opacity: 0.8; }
+.url-link:hover .url-text .accent {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* footer */
+.footer {
+  margin-top: 1.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #181818;
+  text-align: center;
+}
+.footer .tagline {
+  font-family: var(--mono-font);
+  font-size: var(--small-size);
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+}
+.footer .tagline .accent {
+  color: var(--accent);
+  animation: breathe 3s ease-in-out infinite;
+}
+.footer .note {
+  font-size: calc(var(--small-size) * 0.9);
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
