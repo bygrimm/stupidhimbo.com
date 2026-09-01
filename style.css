@@ -29,12 +29,12 @@
   50% { opacity: 1; }
 }
 @keyframes cardGlow {
-  0%, 100% { box-shadow: 0 0 50px -18px rgba(115, 116, 52, 0.42), 0 0 130px -40px rgba(127, 140, 59, 0.28); }
-  50% { box-shadow: 0 0 72px -16px rgba(115, 116, 52, 0.6), 0 0 170px -30px rgba(127, 140, 59, 0.42); }
+  0%, 100% { box-shadow: 0 0 54px -16px rgba(115, 116, 52, 0.5), 0 0 140px -36px rgba(127, 140, 59, 0.34); }
+  50% { box-shadow: 0 0 62px -14px rgba(115, 116, 52, 0.6), 0 0 160px -30px rgba(127, 140, 59, 0.42); }
 }
 @keyframes glowPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 0.8; }
 }
 @keyframes floaty {
   0%, 100% { transform: translateY(0); }
@@ -74,7 +74,7 @@ body::before {
   background: radial-gradient(closest-side, rgba(115, 116, 52, 0.16), transparent 72%);
   pointer-events: none;
   z-index: 0;
-  animation: glowPulse 9s ease-in-out infinite;
+  animation: glowPulse 12s ease-in-out infinite;
 }
 
 .card {
@@ -85,7 +85,7 @@ body::before {
   padding: 3rem 2rem 2rem;
   position: relative;
   z-index: 1;
-  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both, cardGlow 8s ease-in-out infinite;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both, cardGlow 10s ease-in-out infinite;
 }
 
 .card::before, .card::after {
