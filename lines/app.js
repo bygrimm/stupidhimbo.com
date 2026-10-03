@@ -61,8 +61,11 @@
   }
 
   /* the meme title rendered the way ohisms styles its own headers: one
-     colour per letter walking a grey ramp. */
-  var RAMP = ['#484848', '#5a5a5a', '#6c6c6c', '#7e7e7e', '#909090', '#a2a2a2', '#b4b4b4', '#c6c6c6'];
+     colour per letter walking a grey ramp. the ramp's floor is set so even
+     the dimmest letter clears 4.5:1 on the page background (#7a7a7a =
+     4.6:1); it used to start at #484848, which was 2.2:1 and read as a
+     smudge for the first letter of every credit. */
+  var RAMP = ['#7a7a7a', '#878787', '#949494', '#a1a1a1', '#aeaeae', '#bbbbbb', '#c8c8c8', '#d5d5d5'];
   function rampTitle(str) {
     var out = '', i = 0, k = 0;
     for (; i < str.length; i++) {

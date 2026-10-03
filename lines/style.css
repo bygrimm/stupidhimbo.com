@@ -8,14 +8,14 @@
   --card-bg: #0f120f;
   --card-border: #1a221a;
   --rule: #1f261e;
-  --accent: #737434;
-  --accent-lit: #8d9042;
-  --grad-start: #7f8c3b;
-  --grad-end: #51581d;
-  --text: #c8d4c8;
-  --text-muted: #898b6f;
-  --text-dim: #6f795d;
-  --text-faint: #4d5347;
+  --accent: #8a8b3e;
+  --accent-lit: #a2a54c;
+  --grad-start: #93a047;
+  --grad-end: #67702a;
+  --text: #d2dcd2;
+  --text-muted: #9c9e85;
+  --text-dim: #879272;
+  --text-faint: #757e6b;
   --body-font: 'Inter', sans-serif;
   --mono-font: 'IBM Plex Mono', monospace;
   --disp-font: 'Jacquarda Bastarda 9', serif;
@@ -48,7 +48,7 @@
   50%      { opacity: 1; }
 }
 
-html { scrollbar-color: #2a3026 #0a0a0a; }
+html { scrollbar-color: #3e4738 #0a0a0a; }
 
 body {
   background: var(--bg);
@@ -74,7 +74,7 @@ body::before {
   width: min(96vw, 820px);
   height: min(90vh, 820px);
   transform: translate(-50%, -50%);
-  background: radial-gradient(closest-side, rgba(115, 116, 52, 0.14), transparent 72%);
+  background: radial-gradient(closest-side, rgba(138, 139, 62, 0.15), transparent 72%);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 14s ease-in-out infinite;
@@ -209,13 +209,13 @@ body::before {
 .chip .tally { color: var(--text-faint); font-size: 0.55rem; margin-left: 0.3rem; }
 .chip[aria-pressed="true"] .tally { color: color-mix(in srgb, var(--accent) 70%, var(--text-faint)); }
 .chip[disabled] {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
-  border-color: #141714;
+  border-color: #2c322c;
 }
 .chip[disabled]::before,
-.chip[disabled]::after { color: #333830; }
-.chip[disabled]::after { content: ' ]\00a0 off'; color: #3a3f38; letter-spacing: 0.06em; }
+.chip[disabled]::after { color: #5b6456; }
+.chip[disabled]::after { content: ' ]\00a0 off'; color: #5f685c; letter-spacing: 0.06em; }
 
 .row-mature { align-items: center; margin-bottom: 1.1rem; }
 .check {
@@ -514,7 +514,7 @@ body::before {
   color: var(--text-faint);
   line-height: 2;
 }
-.foot .fine { font-size: 0.55rem; color: #40443c; }
+.foot .fine { font-size: 0.55rem; color: #7b8273; }
 .foot a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid var(--card-border); }
 .foot a:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
 
