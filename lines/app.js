@@ -392,7 +392,7 @@
 
   var total = LINES.length;
   el.ledger.innerHTML = '<b>' + num(total) + '</b> lines &nbsp;·&nbsp; <b>' + num(SRC.length) +
-    '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;the whole pile, one deal at a time';
+    '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;pick your poison! <span class="heart">♡</span>';
   if (el.built) el.built.textContent = BANK.built;
 
   if (location.hash === '#draw') el.deal.click();

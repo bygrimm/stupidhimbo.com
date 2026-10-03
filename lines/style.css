@@ -129,39 +129,23 @@ body::before {
    needs 7.54px of width per 1px of font size in Jacquarda Bastarda 9
    (measured off the real TTF) -- 397px at the house 3.1rem, which sits well
    in the 711px desktop column but would clip on a phone, so it goes fluid
-   under the breakpoint (see the narrow block). the gradient lives on the h1
-   itself: the title is no longer the link home, "by ohisms" is. */
+   under the breakpoint (see the narrow block). no byline under it any more,
+   so it sits straight on the ledger. */
 .masthead .title {
   font-family: var(--disp-font);
   font-weight: 400;
   font-size: 3.1rem;
   line-height: 1;
   letter-spacing: 0.02em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: var(--grad-start);   /* fallback where background-clip is unsupported */
 }
-.masthead .standfirst {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  line-height: 1.75;
-  max-width: 46ch;
-}
-/* "ohisms" carries the link home now, so it gets the house link treatment */
-.masthead .standfirst a {
-  color: var(--text);
-  text-decoration: none;
-  border-bottom: 1px solid var(--card-border);
-}
-.masthead .standfirst a:hover {
-  color: var(--accent-lit);
-  border-bottom-color: var(--accent);
-}
 .masthead .ledger {
-  margin-top: 0.7rem;
+  margin-top: 0;
   font-family: var(--mono-font);
   font-size: 0.64rem;
   letter-spacing: 0.14em;
@@ -169,6 +153,11 @@ body::before {
   color: var(--text-faint);
 }
 .masthead .ledger b { color: var(--accent); font-weight: 600; }
+/* IBM Plex Mono carries no heart glyph at all (checked U+2661/2665/2764 -- all
+   absent), so the ledger's ♡ is switched to Inter, which has it. without this
+   the browser silently falls back to a system font and the heart renders in a
+   different weight than the words beside it. */
+.masthead .ledger .heart { font-family: var(--body-font); }
 
 /* ── controls ───────────────────────────────────────────────────────── */
 .controls {
