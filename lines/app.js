@@ -19,6 +19,7 @@
     ['dialogue', 'dialogue'],
     ['action',   'action'],
     ['setting',  'settings'],
+    ['shippy',   'shippy'],
     ['lyric',    'lyrics'],
     ['sinday',   'sinday']
   ];
@@ -126,15 +127,20 @@
     return pick;
   }
 
-  /* A hand of several is a fixed menu now, not a free draw: two lines cut from
-     a short list of pairs, three always the full brief. A single line is still
-     whatever drawer you point it at. Lines are always shown in scene order --
-     where, what happens, what's said -- whatever order the pair is written in. */
-  var ORDER = ['setting', 'action', 'dialogue'];
+  /* The drawers, in the order a scene brief would introduce them: where we are,
+     what happens, the kiss, what gets said. ORDER is only for sorting a hand;
+     BRIEF is what a three-line hand always is. */
+  var ORDER = ['setting', 'action', 'shippy', 'dialogue'];
+  var BRIEF = ['setting', 'action', 'dialogue'];
+  /* Two lines are cut from a short menu instead of drawn free. A shippy line is
+     already a whole scene -- "[ S ] kisses [ R ] in the dressing room" names its
+     own place -- so it is never paired with a setting. Two locations fighting
+     for the same hand was the whole bug. */
   var PAIRS = [
     ['setting', 'dialogue'],
     ['setting', 'action'],
-    ['action',  'dialogue']
+    ['action',  'dialogue'],
+    ['shippy',  'dialogue']
   ];
 
   function deal() {
@@ -177,7 +183,7 @@
     if (state.size > 1) {
       // two lines cut from the pair list, three the whole brief; either way
       // each line comes out of its own meme, which is the point.
-      var seq = state.size === 2 ? PAIRS[Math.floor(Math.random() * PAIRS.length)] : ORDER;
+      var seq = state.size === 2 ? PAIRS[Math.floor(Math.random() * PAIRS.length)] : BRIEF;
       seq = seq.filter(function (k) { return buckets[k] && buckets[k].length; })
                .sort(function (a, b) { return ORDER.indexOf(a) - ORDER.indexOf(b); });
       seq.forEach(function (k) {
@@ -271,7 +277,7 @@
 
   function catWord(c) {
     return ({ dialogue: 'dialogue', action: 'action', setting: 'setting',
-              lyric: 'lyric' })[c] || c;
+              shippy: 'shippy', lyric: 'lyric' })[c] || c;
   }
 
   function reduce() {
