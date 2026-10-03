@@ -34,7 +34,8 @@
     ledger:  document.getElementById('ledger-count'),
     recent:  document.getElementById('recent'),
     recentW: document.getElementById('recent-wrap'),
-    built:   document.getElementById('built')
+    built:   document.getElementById('built'),
+    keyhint: document.getElementById('keyhint')
   };
 
   var state = {
@@ -115,6 +116,28 @@
              post: POST[LINES[li][3]], flags: LINES[li][2] };
   }
 
+  /* is this line behind the mature gate? anything that can put a line in front
+     of the reader -- the stage, the recent list, a recall click -- has to ask. */
+  function gated(li) {
+    var l = LINES[li];
+    return !!(l && (l[2] & FLAG_EXPLICIT));
+  }
+
+  /* the recent list is at most three, newest first. recalling a line promotes
+     it instead of filing a second copy, so dedupe on the line index: render()
+     used to unshift unconditionally, which let a recalled line show up twice
+     in its own history. */
+  function pushSeen(rec) {
+    state.seen = state.seen.filter(function (r) { return r.li !== rec.li; });
+    state.seen.unshift({ text: rec.text, src: rec.src.n, li: rec.li });
+    state.seen = state.seen.slice(0, 3);
+  }
+
+  /* what the recent list may show under the current gate */
+  function visibleSeen() {
+    return state.seen.filter(function (r) { return state.mature || !gated(r.li); });
+  }
+
   /* ── drawing ─────────────────────────────────────────────────────── */
   function drawOne(list, avoid) {
     // prefer something not already served this session; relax if we run dry
@@ -144,6 +167,8 @@
     hand.push(makeRec(pick));
 
     state.drawn = hand;
+    pushSeen(hand[0]);
+    renderRecent();
     render(true);
   }
 
@@ -180,12 +205,11 @@
     el.copy.classList.remove('done');
     el.copyLabel.textContent = 'copy';
 
-    if (hand[0]) {
-      state.seen.unshift({ text: hand[0].text, src: hand[0].src.n, li: hand[0].li });
-      state.seen = state.seen.slice(0, 3);
-      renderRecent();
-    }
-
+    // render() is display only. it used to record the draw into state.seen,
+    // which meant every re-render (e.g. recalling a recent line) filed a
+    // duplicate, and nothing could be filtered out of the list without also
+    // losing the record. recording lives in pushSeen(), called by the only two
+    // paths that actually draw: deal() and the recent-list recall.
     if (animate && !reduce()) scramble(hand);
   }
 
@@ -221,9 +245,12 @@
   }
 
   function renderRecent() {
-    if (!state.seen.length) { el.recentW.hidden = true; return; }
+    // the gate applies here too: a line drawn while mature content was allowed
+    // must not sit in the recent list waiting to be recalled after opting out
+    var vis = visibleSeen();
+    if (!vis.length) { el.recentW.hidden = true; el.recent.innerHTML = ''; return; }
     el.recentW.hidden = false;
-    el.recent.innerHTML = state.seen.map(function (r, i) {
+    el.recent.innerHTML = vis.map(function (r, i) {
       return '<li style="animation-delay:' + (i * 30) + 'ms"><button data-li="' + r.li + '">' +
              esc(r.text) + '<span class="r-src">' + esc(r.src.toLowerCase()) + '</span></button></li>';
     }).join('');
@@ -321,8 +348,12 @@
     ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy'); done(); } catch (e) { toast('copy blocked — select by hand'); }
+    // execCommand reports whether the copy actually happened. announcing success
+    // without reading it claimed a copy on browsers that refused outright.
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
     document.body.removeChild(ta);
+    if (ok) done(); else toast('copy blocked — select by hand');
   }
 
   var toastEl;
@@ -351,6 +382,8 @@
     el.mature.setAttribute('aria-checked', String(state.mature));
     syncChips();
     remember();
+    // closing the gate has to reach the recent list, not just the stage
+    if (!state.mature) { state.seen = visibleSeen(); renderRecent(); }
     deal();
   });
 
@@ -366,23 +399,48 @@
   el.recent.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-li]');
     if (!b) return;
-    var rec = makeRec(+b.getAttribute('data-li'));
+    var li = +b.getAttribute('data-li');
+    if (gated(li) && !state.mature) return;   // the gate closed since it was drawn
+    var rec = makeRec(li);
     state.drawn = [rec];
+    pushSeen(rec);       // promotes it to the front instead of filing a duplicate
+    renderRecent();
     render(false);
     el.lines.scrollIntoView({ block: 'nearest', behavior: reduce() ? 'auto' : 'smooth' });
   });
 
+  /* WCAG 2.1.4 wants a single-character key shortcut to be remappable,
+     switchable off, or active only on focus. Space and `c` are both single
+     characters, so they can be switched off: `?keys=off` does it and the choice
+     sticks -- a URL flag alone would vanish the moment remember() rewrote the
+     query string -- and `?keys=on` brings them back. Enter is left alone: it is
+     the standard activation key, not a character shortcut. */
+  var KEYS_OFF = (function () {
+    var q = '';
+    try { q = new URLSearchParams(location.search).get('keys') || ''; } catch (err) {}
+    try {
+      if (q === 'off') localStorage.setItem('ohisms.keys', 'off');
+      else if (q === 'on') localStorage.removeItem('ohisms.keys');
+      return localStorage.getItem('ohisms.keys') === 'off';
+    } catch (err) { return q === 'off'; }
+  })();
+
+  /* anything that already owns Enter, Space or a letter: a link, a button, a
+     field. Enter on the credit's "the original post" link has to open the post,
+     and it used to be swallowed and turned into another draw instead. */
+  function interactive(node) {
+    if (!node || !node.closest) return false;
+    return !!node.closest('a[href], button, input, textarea, select, summary, ' +
+                          '[contenteditable], [role="button"], [role="link"], [role="switch"]');
+  }
+
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    var tag = (e.target.tagName || '').toLowerCase();
-    if (tag === 'input' || tag === 'textarea') return;
-    if (e.key === ' ' || e.key === 'Enter') {
-      if (e.target.closest && e.target.closest('button')) return;
-      e.preventDefault();
-      el.deal.click();
-    } else if (e.key === 'c' || e.key === 'C') {
-      copy();
-    }
+    if (interactive(e.target)) return;
+    if (e.key === 'Enter') { e.preventDefault(); el.deal.click(); return; }
+    if (KEYS_OFF) return;          // space falls back to scrolling the page
+    if (e.key === ' ') { e.preventDefault(); el.deal.click(); }
+    else if (e.key === 'c' || e.key === 'C') { copy(); }
   });
 
   /* ── boot ────────────────────────────────────────────────────────── */
@@ -395,9 +453,16 @@
     '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;pick your poison! <span class="heart">♡</span>';
   if (el.built) el.built.textContent = BANK.built;
 
-  if (location.hash === '#draw') el.deal.click();
+  // the hint advertises keys that are switched off; don't lie about them
+  if (KEYS_OFF && el.keyhint) el.keyhint.hidden = true;
 
-  // deal the first hand on arrival, a beat after paint so the shuffle reads
-  // as the page waking up rather than a flash of content
-  setTimeout(function () { deal(); }, reduce() ? 0 : 140);
+  // one line on arrival, a beat after paint so the shuffle reads as the page
+  // waking up rather than a flash of content. #draw is the same thing with no
+  // wait -- these two used to run together and both called deal(), so the hash
+  // draw was overwritten and a single page load filed two entries.
+  if (location.hash === '#draw') {
+    el.deal.click();
+  } else {
+    setTimeout(function () { deal(); }, reduce() ? 0 : 140);
+  }
 })();
