@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ohisms — the pile</title>
+<meta name="description" content="every dialogue prompt posted on ohisms, dealt at random.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="sheet">
+
+  <header class="masthead">
+    <div class="est">— since 2016 —</div>
+    <h1 class="wordmark"><a href="../">ohisms</a></h1>
+    <p class="standfirst">assorted roleplay resources,&nbsp;&nbsp;dealt at random.<br>
+      <span class="muted">every line i've ever posted here,&nbsp;&nbsp;in one pile.</span></p>
+    <div class="ledger" id="ledger-count">—</div>
+  </header>
+
+  <section class="controls" aria-label="draw settings">
+
+    <div class="row">
+      <span class="label">draw from</span>
+      <div class="chips" id="chips" role="group" aria-label="filter by meme type"></div>
+    </div>
+
+    <div class="row">
+      <span class="label">hand size</span>
+      <div class="chips" id="sizes" role="group" aria-label="how many lines"></div>
+    </div>
+
+    <div class="row row-mature">
+      <button class="check" id="mature" role="switch" aria-checked="false">
+        <span class="box" aria-hidden="true"></span><span class="check-lbl">allow mature content</span>
+      </button>
+      <span class="note">sinday memes stay in the drawer until this is on</span>
+    </div>
+
+    <div class="deal-row">
+      <button class="cmd" id="deal">
+        <span class="cmd-glyph" aria-hidden="true">↺</span><span class="cmd-text">draw</span>
+      </button>
+      <button class="cmd cmd-quiet" id="copy"><span class="cmd-text">copy</span></button>
+      <span class="keys">press&nbsp;<b>space</b>&nbsp;to draw,&nbsp;&nbsp;<b>c</b>&nbsp;to copy</span>
+    </div>
+
+  </section>
+
+  <section class="stage" aria-label="drawn lines">
+    <article class="post" id="post">
+      <ol class="lines" id="lines" aria-live="polite">
+        <li class="idle">↺&nbsp;&nbsp;hit <em>draw</em> and i'll deal you a hand out of the pile.</li>
+      </ol>
+      <div class="credit" id="credit" hidden></div>
+    </article>
+  </section>
+
+  <section class="recent" id="recent-wrap" hidden aria-label="recent draws">
+    <div class="subhead">last few</div>
+    <ul class="recent-list" id="recent"></ul>
+  </section>
+
+  <footer class="foot">
+    <span class="rule" aria-hidden="true"></span>
+    <p>all lines written by grimm&nbsp;&nbsp;·&nbsp;&nbsp;ohisms, est. 2016&nbsp;&nbsp;·&nbsp;&nbsp;<a href="https://www.tumblr.com/ohisms" target="_blank" rel="noopener">the blog</a></p>
+    <p class="fine">↩ <a href="../">back to stupidhimbo.com</a>&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;pile pulled <span id="built">—</span></p>
+  </footer>
+
+</main>
+
+<noscript>
+  <p class="noscript">this page deals hands with javascript,&nbsp;&nbsp;which your browser has switched off.&nbsp;&nbsp;the whole pile is still readable as <a href="bank.js">bank.js</a>.</p>
+</noscript>
+
+<script src="bank.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
