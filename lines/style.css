@@ -182,6 +182,7 @@ body::before {
   color: var(--text-faint);
   flex: 0 0 6.4rem;
 }
+.row-body { flex: 1 1 auto; min-width: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 0.3rem 0.15rem; }
 
 .chip {
@@ -216,6 +217,13 @@ body::before {
 .chip[disabled]::before,
 .chip[disabled]::after { color: #333830; }
 .chip[disabled]::after { content: ' ]\00a0 off'; color: #3a3f38; letter-spacing: 0.06em; }
+
+/* that "off" tag belongs to the sinday gate. inside a dimmed row every chip is
+   disabled at once and the tag would smear across all six, meaning nothing. */
+.chips.is-dim .chip[disabled]::after { content: ' ]'; }
+/* let the row carry the dimming on its own, rather than stacking with the
+   per-chip fade and leaving the text unreadable */
+.chips.is-dim .chip[disabled] { opacity: 1; }
 
 .row-mature { align-items: center; margin-bottom: 1.1rem; }
 .check {
@@ -341,6 +349,20 @@ body::before {
 .cmd-quiet:hover::before,
 .cmd-quiet:hover::after { color: var(--accent); }
 .cmd-quiet:disabled { opacity: 0.4; cursor: default; }
+
+/* past one line the dealer composes the drawers itself, so the filter row
+   goes quiet rather than sitting there claiming to do something */
+.chips.is-dim { opacity: 0.62; filter: saturate(0.45); }
+.chips.is-dim .chip { cursor: default; }
+/* sits directly under the chips inside the draw-from block, so proximity says
+   which row it belongs to -- floated to the right it read as a caption for
+   "hand size" instead */
+.hand-note {
+  display: block;
+  margin-top: 0.4rem;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
 .cmd-quiet:disabled:hover {
   background: none;
   border-color: var(--card-border);

@@ -22,12 +22,13 @@
     ['lyric',    'lyrics'],
     ['sinday',   'sinday']
   ];
-  var SIZES = [1, 3, 5];
+  var SIZES = [1, 2, 3];
 
   var el = {
     chips:   document.getElementById('chips'),
     sizes:   document.getElementById('sizes'),
     mature:  document.getElementById('mature'),
+    catNote: document.getElementById('cat-note'),
     deal:    document.getElementById('deal'),
     copy:    document.getElementById('copy'),
     copyLabel: document.querySelector('#copy .cmd-text'),
@@ -125,8 +126,16 @@
     return pick;
   }
 
-  /* the drawers, in the order a scene brief would introduce them */
-  var TRIO = ['setting', 'action', 'dialogue'];
+  /* A hand of several is a fixed menu now, not a free draw: two lines cut from
+     a short list of pairs, three always the full brief. A single line is still
+     whatever drawer you point it at. Lines are always shown in scene order --
+     where, what happens, what's said -- whatever order the pair is written in. */
+  var ORDER = ['setting', 'action', 'dialogue'];
+  var PAIRS = [
+    ['setting', 'dialogue'],
+    ['setting', 'action'],
+    ['action',  'dialogue']
+  ];
 
   function deal() {
     var list = pool();
@@ -166,20 +175,18 @@
     }
 
     if (state.size > 1) {
-      // spread the hand over drawers and memes instead of dealing one meme's
-      // whole list. unfiltered that reads like a scene brief -- a setting, an
-      // action, a line of dialogue, each from its own post -- and inside a
-      // single drawer it still pulls from as many memes as there are lines.
-      var seq = (state.cat === 'all' || state.cat === 'sinday')
-        ? TRIO.filter(function (k) { return buckets[k] && buckets[k].length; })
-        : [state.cat];
+      // two lines cut from the pair list, three the whole brief; either way
+      // each line comes out of its own meme, which is the point.
+      var seq = state.size === 2 ? PAIRS[Math.floor(Math.random() * PAIRS.length)] : ORDER;
+      seq = seq.filter(function (k) { return buckets[k] && buckets[k].length; })
+               .sort(function (a, b) { return ORDER.indexOf(a) - ORDER.indexOf(b); });
       seq.forEach(function (k) {
         if (hand.length >= state.size) return;
         var r = grab(k);
         if (r) hand.push(r);
       });
-      // top up starting one drawer along, so nothing doubles up
-      var cur = 1, guard = 0;
+      // if a drawer came back empty, top up from the rest rather than deal short
+      var cur = 0, guard = 0;
       while (hand.length < state.size && guard++ < 80) {
         var r2 = grab(seq[cur % seq.length]);
         cur++;
@@ -325,12 +332,17 @@
     }).join('');
   }
 
-  function syncMatureAvailability() {
-    var on = state.mature;
+  function syncChips() {
+    // The filter row only means anything for a single line. Past that the hand
+    // is a set menu, so the row dims and goes inert instead of staying live and
+    // implying it still steers the draw.
+    var dim = state.size > 1;
+    el.chips.classList.toggle('is-dim', dim);
+    if (el.catNote) el.catNote.hidden = !dim;
     el.chips.querySelectorAll('.chip').forEach(function (c) {
       var key = c.getAttribute('data-cat');
-      var needs = key === 'sinday';
-      c.disabled = needs && !on;
+      var gated = key === 'sinday' && !state.mature;
+      c.disabled = dim || gated;
       if (c.disabled && state.cat === key) setCat('all');
     });
   }
@@ -348,13 +360,17 @@
     el.sizes.querySelectorAll('.chip').forEach(function (c) {
       c.setAttribute('aria-pressed', String(+c.getAttribute('data-size') === n));
     });
+    // a hand of several is composed by the dealer, so any drawer filter drops
+    if (n > 1) setCat('all');
+    syncChips();
     remember();
   }
 
   function remember() {
     if (!history.replaceState) return;
     var q = [];
-    if (state.cat !== 'all') q.push('cat=' + state.cat);
+    // the drawer only travels in the url when it still applies to the deal
+    if (state.cat !== 'all' && state.size === 1) q.push('cat=' + state.cat);
     if (state.size !== 1) q.push('n=' + state.size);
     if (state.mature) q.push('mature=1');
     try { history.replaceState(null, '', q.length ? '?' + q.join('&') : location.pathname); } catch (e) {}
@@ -367,6 +383,8 @@
     if (SIZES.indexOf(n) > -1) state.size = n;
     var c = q.get('cat');
     if (c && CATS.some(function (p) { return p[0] === c; })) state.cat = c;
+    // a drawer in the url can't apply to a set-menu hand, so it's dropped
+    if (state.size > 1) state.cat = 'all';
   }
 
   /* ── clipboard ───────────────────────────────────────────────────── */
@@ -451,7 +469,7 @@
   el.mature.addEventListener('click', function () {
     state.mature = !state.mature;
     el.mature.setAttribute('aria-checked', String(state.mature));
-    syncMatureAvailability();
+    syncChips();
     remember();
     deal();
   });
@@ -490,7 +508,7 @@
   /* ── boot ────────────────────────────────────────────────────────── */
   restore();
   buildChips();
-  syncMatureAvailability();
+  syncChips();
   el.sizes.querySelectorAll('.chip').forEach(function (c) {
     c.setAttribute('aria-pressed', String(+c.getAttribute('data-size') === state.size));
   });
