@@ -61,11 +61,12 @@
   }
 
   /* the meme title rendered the way ohisms styles its own headers: one
-     colour per letter walking a grey ramp. the ramp's floor is set so even
-     the dimmest letter clears 4.5:1 on the page background (#7a7a7a =
-     4.6:1); it used to start at #484848, which was 2.2:1 and read as a
-     smudge for the first letter of every credit. */
-  var RAMP = ['#7a7a7a', '#878787', '#949494', '#a1a1a1', '#aeaeae', '#bbbbbb', '#c8c8c8', '#d5d5d5'];
+     colour per letter walking a grey ramp. the floor clears 5.4:1 on the page
+     background and the ceiling is held at #d5d5d5, just under body-text
+     brightness, so the ramp reads as a gradient rather than a fade to nowhere.
+     it originally started at #484848, which was 2.2:1 and read as a smudge
+     for the first letter of every credit. */
+  var RAMP = ['#868686', '#919191', '#9d9d9d', '#a8a8a8', '#b3b3b3', '#bebebe', '#cacaca', '#d5d5d5'];
   function rampTitle(str) {
     var out = '', i = 0, k = 0;
     for (; i < str.length; i++) {
@@ -181,7 +182,7 @@
 
     if (hand[0]) {
       state.seen.unshift({ text: hand[0].text, src: hand[0].src.n, li: hand[0].li });
-      state.seen = state.seen.slice(0, 6);
+      state.seen = state.seen.slice(0, 3);
       renderRecent();
     }
 

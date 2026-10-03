@@ -8,18 +8,18 @@
   --card-bg: #0f120f;
   --card-border: #1a221a;
   --rule: #1f261e;
-  --accent: #8a8b3e;
-  --accent-lit: #a2a54c;
-  --grad-start: #93a047;
-  --grad-end: #67702a;
-  --text: #d2dcd2;
-  --text-muted: #9c9e85;
-  --text-dim: #879272;
-  --text-faint: #757e6b;
+  --accent: #9c9d46;
+  --accent-lit: #b1b45c;
+  --grad-start: #9fad4d;
+  --grad-end: #808b34;
+  --text: #e7ece7;
+  --text-muted: #afb19d;
+  --text-dim: #9ba489;
+  --text-faint: #8c9583;
   --body-font: 'Inter', sans-serif;
   --mono-font: 'IBM Plex Mono', monospace;
   --disp-font: 'Jacquarda Bastarda 9', serif;
-  --sheet-w: 660px;
+  --sheet-w: 780px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,20 +48,23 @@
   50%      { opacity: 1; }
 }
 
-html { scrollbar-color: #3e4738 #0a0a0a; }
+html { scrollbar-color: #515c49 #0a0a0a; }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--body-font);
   font-weight: 300;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 3.5rem 1.5rem 4rem;
+  /* vertical centering is done with auto margins on .sheet, NOT
+     align-items: center -- on a viewport shorter than the content that clips
+     the top of the page and scrolling can't reach it. auto margins collapse to
+     0 the moment the content overflows, so it degrades to top-aligned. */
+  padding: 1.9rem 1.25rem 2.2rem;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -98,9 +101,10 @@ body::before {
   z-index: 1;
   width: 100%;
   max-width: var(--sheet-w);
+  margin: auto 0;   /* centers it vertically; yields to top-align on overflow */
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  padding: 2.9rem 2.6rem 2.2rem;
+  padding: 2.2rem 2.1rem 1.8rem;
   animation: fadeUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -118,21 +122,14 @@ body::before {
 
 /* ── masthead ───────────────────────────────────────────────────────── */
 .masthead {
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--rule);
 }
-.masthead .est {
-  font-family: var(--mono-font);
-  font-size: 0.62rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 0.55rem;
-}
-/* the title is a whole phrase now, not a single word. "line randomizer."
-   measures 389px at 3.1rem in Jacquarda Bastarda 9, which sits well in the
-   575px desktop column -- but would clip on a phone, so it goes fluid under
-   the breakpoint (see the narrow block). the gradient moved onto the h1
+/* the title is a whole phrase now, not a single word. "line randomizer"
+   needs 7.54px of width per 1px of font size in Jacquarda Bastarda 9
+   (measured off the real TTF) -- 397px at the house 3.1rem, which sits well
+   in the 711px desktop column but would clip on a phone, so it goes fluid
+   under the breakpoint (see the narrow block). the gradient lives on the h1
    itself: the title is no longer the link home, "by ohisms" is. */
 .masthead .title {
   font-family: var(--disp-font);
@@ -140,7 +137,7 @@ body::before {
   font-size: 3.1rem;
   line-height: 1;
   letter-spacing: 0.02em;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
   -webkit-background-clip: text;
   background-clip: text;
@@ -148,7 +145,7 @@ body::before {
   color: var(--grad-start);   /* fallback where background-clip is unsupported */
 }
 .masthead .standfirst {
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
   line-height: 1.75;
   max-width: 46ch;
@@ -163,11 +160,10 @@ body::before {
   color: var(--accent-lit);
   border-bottom-color: var(--accent);
 }
-.masthead .standfirst .muted { color: var(--text-dim); }
 .masthead .ledger {
-  margin-top: 0.95rem;
+  margin-top: 0.7rem;
   font-family: var(--mono-font);
-  font-size: 0.6rem;
+  font-size: 0.64rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -176,19 +172,19 @@ body::before {
 
 /* ── controls ───────────────────────────────────────────────────────── */
 .controls {
-  padding: 1.35rem 0 1.5rem;
+  padding: 1.05rem 0 1.2rem;
   border-bottom: 1px solid var(--rule);
 }
 .row {
   display: flex;
   align-items: baseline;
   gap: 0.9rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
   flex-wrap: wrap;
 }
 .row .label {
   font-family: var(--mono-font);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -198,7 +194,7 @@ body::before {
 
 .chip {
   font-family: var(--mono-font);
-  font-size: 0.63rem;
+  font-size: 0.68rem;
   letter-spacing: 0.09em;
   color: var(--text-dim);
   background: none;
@@ -218,18 +214,18 @@ body::before {
 }
 .chip[aria-pressed="true"]::before,
 .chip[aria-pressed="true"]::after { color: var(--accent); }
-.chip .tally { color: var(--text-faint); font-size: 0.55rem; margin-left: 0.3rem; }
+.chip .tally { color: var(--text-faint); font-size: 0.6rem; margin-left: 0.3rem; }
 .chip[aria-pressed="true"] .tally { color: color-mix(in srgb, var(--accent) 70%, var(--text-faint)); }
 .chip[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
-  border-color: #2c322c;
+  border-color: #394139;
 }
 .chip[disabled]::before,
-.chip[disabled]::after { color: #5b6456; }
-.chip[disabled]::after { content: ' ]\00a0 off'; color: #5f685c; letter-spacing: 0.06em; }
+.chip[disabled]::after { color: #727d6c; }
+.chip[disabled]::after { content: ' ]\00a0 off'; color: #778273; letter-spacing: 0.06em; }
 
-.row-mature { align-items: center; margin-bottom: 1.1rem; }
+.row-mature { align-items: center; margin-bottom: 0.85rem; }
 .check {
   display: inline-flex;
   align-items: center;
@@ -238,7 +234,7 @@ body::before {
   border: none;
   cursor: pointer;
   font-family: var(--mono-font);
-  font-size: 0.63rem;
+  font-size: 0.68rem;
   letter-spacing: 0.09em;
   color: var(--text-dim);
   padding: 0;
@@ -272,7 +268,7 @@ body::before {
 .check:hover { color: var(--text); }
 .row-mature .note {
   font-family: var(--mono-font);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   color: var(--text-faint);
   font-style: italic;
@@ -291,7 +287,7 @@ body::before {
 .cmd {
   display: inline-flex;
   align-items: center;
-  min-height: 2.3rem;
+  min-height: 2.45rem;
   font-family: var(--mono-font);
   background: color-mix(in srgb, var(--accent) 9%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
@@ -325,7 +321,7 @@ body::before {
   display: flex;
   align-items: center;
   padding: 0 0.05rem;
-  font-size: 0.68rem;
+  font-size: 0.73rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -366,7 +362,7 @@ body::before {
   margin-left: auto;
   align-self: center;
   font-family: var(--mono-font);
-  font-size: 0.56rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   color: var(--text-faint);
   font-style: italic;
@@ -378,20 +374,20 @@ body::before {
 }
 
 /* ── stage: just the lines and who wrote them ───────────────────────── */
-.stage { padding-top: 2rem; }
+.stage { padding-top: 1.4rem; }
 
 .lines {
   list-style: none;
   counter-reset: draw;
-  min-height: 6.5rem;
+  min-height: 5rem;
 }
 .lines li {
   counter-increment: draw;
   position: relative;
-  padding-left: 2.1rem;
+  padding-left: 2.3rem;
   margin-bottom: 0.7rem;
-  font-size: 0.92rem;
-  line-height: 1.65;
+  font-size: 1.05rem;
+  line-height: 1.6;
   color: var(--text);
   animation: fadeUp 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: calc(var(--d, 0) * 55ms);
@@ -400,9 +396,9 @@ body::before {
   content: counter(draw, decimal-leading-zero) '.';
   position: absolute;
   left: 0;
-  top: 0.12em;
+  top: 0.2em;
   font-family: var(--mono-font);
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   letter-spacing: 0.06em;
   color: var(--text-faint);
 }
@@ -413,7 +409,7 @@ body::before {
 }
 .lines li.idle {
   color: var(--text-dim);
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   font-style: italic;
 }
 .lines li.idle::before { content: ''; }
@@ -421,14 +417,14 @@ body::before {
 .lines li.scramble { opacity: 0.42; filter: blur(0.6px); }
 
 .credit {
-  margin-top: 1.6rem;
-  padding-top: 0.95rem;
+  margin-top: 1.15rem;
+  padding-top: 0.8rem;
   border-top: 1px solid var(--rule);
 }
 .credit-name {
   font-family: var(--body-font);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   line-height: 1.5;
@@ -437,7 +433,7 @@ body::before {
 }
 .credit-meta {
   font-family: var(--mono-font);
-  font-size: 0.58rem;
+  font-size: 0.63rem;
   letter-spacing: 0.1em;
   color: var(--text-faint);
   line-height: 1.9;
@@ -452,19 +448,19 @@ body::before {
 .credit-note {
   margin-top: 0.5rem;
   font-family: var(--mono-font);
-  font-size: 0.56rem;
+  font-size: 0.6rem;
   letter-spacing: 0.08em;
   color: var(--text-faint);
   font-style: italic;
   line-height: 1.9;
 }
-.credit-note.warn { color: #8a7a4e; }
+.credit-note.warn { color: #a8955f; }
 
 /* ── recent ─────────────────────────────────────────────────────────── */
-.recent { margin-top: 1.8rem; }
+.recent { margin-top: 1.3rem; }
 .subhead {
   font-family: var(--mono-font);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -481,9 +477,9 @@ body::before {
   background: none;
   border: none;
   border-left: 2px solid transparent;
-  padding: 0.28rem 0.6rem;
+  padding: 0.34rem 0.6rem;
   font-family: var(--body-font);
-  font-size: 0.74rem;
+  font-size: 0.82rem;
   color: var(--text-dim);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
@@ -498,7 +494,7 @@ body::before {
 }
 .recent-list .r-src {
   font-family: var(--mono-font);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   letter-spacing: 0.1em;
   color: var(--text-faint);
   margin-left: 0.5rem;
@@ -506,8 +502,8 @@ body::before {
 
 /* ── foot ───────────────────────────────────────────────────────────── */
 .foot {
-  margin-top: 2rem;
-  padding-top: 1.1rem;
+  margin-top: 1.4rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--rule);
   text-align: center;
 }
@@ -515,18 +511,18 @@ body::before {
   display: block;
   width: 34px;
   height: 1px;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.8rem;
   background: var(--accent);
   opacity: 0.5;
 }
 .foot p {
   font-family: var(--mono-font);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   letter-spacing: 0.12em;
   color: var(--text-faint);
   line-height: 2;
 }
-.foot .fine { font-size: 0.55rem; color: #7b8273; }
+.foot .fine { font-size: 0.6rem; color: #969f8c; margin-top: 0.5rem; }
 .foot a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid var(--card-border); }
 .foot a:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
 
@@ -568,15 +564,15 @@ body::before {
 
 /* ── narrow ─────────────────────────────────────────────────────────── */
 @media (max-width: 620px) {
-  body { padding: 1.4rem 0.9rem 3rem; }
-  .sheet { padding: 2rem 1.3rem 1.6rem; }
-  /* fluid: "line randomizer." needs 7.84px of width per 1px of font size in
-     Jacquarda Bastarda 9 (measured off the real TTF), so this caps the size
-     to the column and stops it clipping on a 320px phone -- the old fixed
-     2.4rem overflowed there by 54px. */
-  .masthead .title { font-size: min(3.1rem, calc((100vw - 80px) / 7.84)); }
+  body { padding: 1rem 0.8rem 1.6rem; }
+  .sheet { padding: 1.6rem 1.15rem 1.3rem; }
+  /* fluid: "line randomizer" needs 7.54px of width per 1px of font size in
+     Jacquarda Bastarda 9 (measured off the real TTF). 7.6 gives ~1% of slack.
+     Without this the title clips on a 320px phone -- a fixed 2.4rem
+     overflowed there by 54px. */
+  .masthead .title { font-size: min(3.1rem, calc((100vw - 80px) / 7.6)); }
   .row .label { flex: 1 0 100%; margin-bottom: 0.1rem; }
   .keys { margin-left: 0; flex: 1 0 100%; text-align: center; }
   .deal-row { justify-content: space-between; }
-  .lines li { padding-left: 1.8rem; font-size: 0.88rem; }
+  .lines li { padding-left: 1.9rem; font-size: 1rem; }
 }
