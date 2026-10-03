@@ -436,6 +436,45 @@ body::before {
   border-bottom: 1px solid var(--card-border);
 }
 .credit-meta a:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
+
+/* a hand draws from several memes now, so each line is credited where it
+   stands -- numbered to match the lines above */
+.credit-list {
+  list-style: none;
+  counter-reset: src;
+  margin: 0.2rem 0 0;
+  padding: 0;
+}
+.credit-list li {
+  counter-increment: src;
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-family: var(--mono-font);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  line-height: 1.9;
+  color: var(--text-faint);
+}
+.credit-list li::before {
+  content: counter(src, decimal-leading-zero);
+  min-width: 1.3rem;
+  flex-shrink: 0;
+  opacity: 0.55;
+  font-style: italic;
+}
+.credit-list .cn {
+  color: var(--text-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--card-border);
+}
+.credit-list .cn:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
+.credit-list .cm {
+  margin-left: auto;
+  padding-left: 0.7rem;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
 .credit-note {
   margin-top: 0.5rem;
   font-family: var(--mono-font);
