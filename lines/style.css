@@ -515,15 +515,6 @@ body::before {
 .foot a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid var(--card-border); }
 .foot a:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
 
-.noscript {
-  max-width: var(--sheet-w);
-  margin: 1.5rem auto;
-  font-family: var(--mono-font);
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  line-height: 1.9;
-}
-
 /* toast */
 .toast {
   position: fixed;
