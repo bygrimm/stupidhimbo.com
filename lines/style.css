@@ -129,27 +129,39 @@ body::before {
   color: var(--text-faint);
   margin-bottom: 0.55rem;
 }
-.masthead .wordmark {
+/* the title is a whole phrase now, not a single word. "line randomizer."
+   measures 389px at 3.1rem in Jacquarda Bastarda 9, which sits well in the
+   575px desktop column -- but would clip on a phone, so it goes fluid under
+   the breakpoint (see the narrow block). the gradient moved onto the h1
+   itself: the title is no longer the link home, "by ohisms" is. */
+.masthead .title {
   font-family: var(--disp-font);
   font-weight: 400;
   font-size: 3.1rem;
   line-height: 1;
   letter-spacing: 0.02em;
-  margin-bottom: 0.75rem;
-}
-.masthead .wordmark a {
-  text-decoration: none;
+  margin-bottom: 0.7rem;
   background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--grad-start);   /* fallback where background-clip is unsupported */
 }
-.masthead .wordmark a:hover { filter: brightness(1.18); }
 .masthead .standfirst {
   font-size: 0.84rem;
   color: var(--text-muted);
   line-height: 1.75;
   max-width: 46ch;
+}
+/* "ohisms" carries the link home now, so it gets the house link treatment */
+.masthead .standfirst a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--card-border);
+}
+.masthead .standfirst a:hover {
+  color: var(--accent-lit);
+  border-bottom-color: var(--accent);
 }
 .masthead .standfirst .muted { color: var(--text-dim); }
 .masthead .ledger {
@@ -558,7 +570,11 @@ body::before {
 @media (max-width: 620px) {
   body { padding: 1.4rem 0.9rem 3rem; }
   .sheet { padding: 2rem 1.3rem 1.6rem; }
-  .masthead .wordmark { font-size: 2.4rem; }
+  /* fluid: "line randomizer." needs 7.84px of width per 1px of font size in
+     Jacquarda Bastarda 9 (measured off the real TTF), so this caps the size
+     to the column and stops it clipping on a 320px phone -- the old fixed
+     2.4rem overflowed there by 54px. */
+  .masthead .title { font-size: min(3.1rem, calc((100vw - 80px) / 7.84)); }
   .row .label { flex: 1 0 100%; margin-bottom: 0.1rem; }
   .keys { margin-left: 0; flex: 1 0 100%; text-align: center; }
   .deal-row { justify-content: space-between; }
