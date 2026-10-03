@@ -347,21 +347,6 @@ body::before {
 }
 .cmd-quiet.done .cmd-text { color: var(--accent-lit); }
 
-.keys {
-  margin-left: auto;
-  align-self: center;
-  font-family: var(--mono-font);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  color: var(--text-faint);
-  font-style: italic;
-}
-.keys b {
-  color: var(--text-muted);
-  font-weight: 400;
-  font-style: normal;
-}
-
 /* ── stage: just the lines and who wrote them ───────────────────────── */
 .stage { padding-top: 1.4rem; }
 
@@ -552,7 +537,5 @@ body::before {
      overflowed there by 54px. */
   .masthead .title { font-size: min(3.1rem, calc((100vw - 80px) / 7.6)); }
   .row .label { flex: 1 0 100%; margin-bottom: 0.1rem; }
-  .keys { margin-left: 0; flex: 1 0 100%; text-align: center; }
-  .deal-row { justify-content: space-between; }
   .lines li { padding-left: 1.9rem; font-size: 1rem; }
 }

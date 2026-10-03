@@ -34,8 +34,7 @@
     ledger:  document.getElementById('ledger-count'),
     recent:  document.getElementById('recent'),
     recentW: document.getElementById('recent-wrap'),
-    built:   document.getElementById('built'),
-    keyhint: document.getElementById('keyhint')
+    built:   document.getElementById('built')
   };
 
   var state = {
@@ -409,39 +408,11 @@
     el.lines.scrollIntoView({ block: 'nearest', behavior: reduce() ? 'auto' : 'smooth' });
   });
 
-  /* WCAG 2.1.4 wants a single-character key shortcut to be remappable,
-     switchable off, or active only on focus. Space and `c` are both single
-     characters, so they can be switched off: `?keys=off` does it and the choice
-     sticks -- a URL flag alone would vanish the moment remember() rewrote the
-     query string -- and `?keys=on` brings them back. Enter is left alone: it is
-     the standard activation key, not a character shortcut. */
-  var KEYS_OFF = (function () {
-    var q = '';
-    try { q = new URLSearchParams(location.search).get('keys') || ''; } catch (err) {}
-    try {
-      if (q === 'off') localStorage.setItem('ohisms.keys', 'off');
-      else if (q === 'on') localStorage.removeItem('ohisms.keys');
-      return localStorage.getItem('ohisms.keys') === 'off';
-    } catch (err) { return q === 'off'; }
-  })();
-
-  /* anything that already owns Enter, Space or a letter: a link, a button, a
-     field. Enter on the credit's "the original post" link has to open the post,
-     and it used to be swallowed and turned into another draw instead. */
-  function interactive(node) {
-    if (!node || !node.closest) return false;
-    return !!node.closest('a[href], button, input, textarea, select, summary, ' +
-                          '[contenteditable], [role="button"], [role="link"], [role="switch"]');
-  }
-
-  document.addEventListener('keydown', function (e) {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    if (interactive(e.target)) return;
-    if (e.key === 'Enter') { e.preventDefault(); el.deal.click(); return; }
-    if (KEYS_OFF) return;          // space falls back to scrolling the page
-    if (e.key === ' ') { e.preventDefault(); el.deal.click(); }
-    else if (e.key === 'c' || e.key === 'C') { copy(); }
-  });
+  /* no global key handler. space and `c` used to draw and copy from anywhere on
+     the page, which swallowed Enter on the credit's "the original post" link and
+     needed a WCAG 2.1.4 escape hatch to justify itself. the two buttons are
+     natively keyboard-reachable -- tab to one, Enter or Space fires it -- so the
+     shortcuts were only ever a convenience that got in the way. */
 
   /* ── boot ────────────────────────────────────────────────────────── */
   restore();
@@ -452,9 +423,6 @@
   el.ledger.innerHTML = '<b>' + num(total) + '</b> lines &nbsp;·&nbsp; <b>' + num(SRC.length) +
     '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;pick your poison! <span class="heart">♡</span>';
   if (el.built) el.built.textContent = BANK.built;
-
-  // the hint advertises keys that are switched off; don't lie about them
-  if (KEYS_OFF && el.keyhint) el.keyhint.hidden = true;
 
   // one line on arrival, a beat after paint so the shuffle reads as the page
   // waking up rather than a flash of content. #draw is the same thing with no
