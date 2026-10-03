@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>line randomizer — ohisms</title>
+<meta name="description" content="every prompt line i've posted on ohisms; dealt one at a time.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=20261003e">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="sheet">
+
+  <header class="masthead">
+    <h1 class="title">line randomizer</h1>
+    <div class="ledger" id="ledger-count">—</div>
+  </header>
+
+  <section class="controls" aria-label="draw settings">
+
+    <div class="row">
+      <span class="label">draw from</span>
+      <div class="chips" id="chips" role="group" aria-label="filter by meme type"></div>
+    </div>
+
+    <div class="row row-mature">
+      <button class="check" id="mature" role="switch" aria-checked="false">
+        <span class="box" aria-hidden="true"></span><span class="check-lbl">allow mature content</span>
+      </button>
+      <span class="note">sinday memes stay hidden until this is on</span>
+    </div>
+
+    <div class="deal-row">
+      <button class="cmd" id="deal">
+        <span class="cmd-glyph" aria-hidden="true">↺</span><span class="cmd-text">draw</span>
+      </button>
+      <button class="cmd cmd-quiet" id="copy"><span class="cmd-text">copy</span></button>
+    </div>
+
+  </section>
+
+  <section class="stage" aria-label="drawn lines">
+    <article class="post" id="post">
+      <ol class="lines" id="lines" aria-live="polite">
+        <li class="idle">↺&nbsp;&nbsp;hit <em>draw</em> and i'll deal you a line.</li>
+      </ol>
+      <div class="credit" id="credit" hidden></div>
+    </article>
+  </section>
+
+  <section class="recent" id="recent-wrap" hidden aria-label="recent draws">
+    <div class="subhead">last few</div>
+    <ul class="recent-list" id="recent"></ul>
+  </section>
+
+  <footer class="foot">
+    <span class="rule" aria-hidden="true"></span>
+    <p>all lines sourced from ohisms, est. 2016.</p>
+    <p class="fine">↩ <a href="https://ohisms.tumblr.com" target="_blank" rel="noopener">back to ohisms</a></p>
+  </footer>
+
+</main>
+
+<script src="bank.js?v=20261003e"></script>
+<script src="app.js?v=20261003e"></script>
+</body>
+</html>
