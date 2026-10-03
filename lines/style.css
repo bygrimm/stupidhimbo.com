@@ -203,8 +203,6 @@ body::before {
 }
 .chip[aria-pressed="true"]::before,
 .chip[aria-pressed="true"]::after { color: var(--accent); }
-.chip .tally { color: var(--text-faint); font-size: 0.6rem; margin-left: 0.3rem; }
-.chip[aria-pressed="true"] .tally { color: color-mix(in srgb, var(--accent) 70%, var(--text-faint)); }
 .chip[disabled] {
   opacity: 0.6;
   cursor: not-allowed;

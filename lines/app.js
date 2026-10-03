@@ -86,8 +86,6 @@
     return M[+parts[1] - 1] + ' ' + parts[0];
   }
 
-  function num(n) { return n.toLocaleString('en-US'); }
-
   /* which lines survive the current filters? note 'sinday' is a flag, not a
      drawer -- it cuts across dialogue and setting and stays behind the gate. */
   function pool() {
@@ -256,20 +254,14 @@
   }
 
   /* ── controls ────────────────────────────────────────────────────── */
+  /* just the names. the chips used to carry a per-drawer tally, which meant a
+     full pass over every line to count them at boot -- and told the reader
+     nothing they needed before choosing a drawer. */
   function buildChips() {
-    var counts = { all: LINES.length };
-    LINES.forEach(function (li) {
-      var c = SRC[li[1]].c;
-      counts[c] = (counts[c] || 0) + 1;
-      // sinday cuts across the drawers, so it tallies separately
-      if (li[2] & FLAG_EXPLICIT) counts.sinday = (counts.sinday || 0) + 1;
-    });
-
     el.chips.innerHTML = CATS.map(function (pair) {
       var key = pair[0];
-      var n = counts[key] || 0;
       return '<button class="chip" data-cat="' + key + '" aria-pressed="' +
-        (key === state.cat) + '">' + pair[1] + '<span class="tally">' + num(n) + '</span></button>';
+        (key === state.cat) + '">' + pair[1] + '</button>';
     }).join('');
   }
 
@@ -419,9 +411,12 @@
   buildChips();
   syncChips();
 
-  var total = LINES.length;
-  el.ledger.innerHTML = '<b>' + num(total) + '</b> lines &nbsp;·&nbsp; <b>' + num(SRC.length) +
-    '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;pick your poison! <span class="heart">♡</span>';
+  /* the ledger is deliberately round and hand-set. grimm wants "5,000+" and
+     "70+", not the exact totals, which read as showing off. these are NOT
+     derived from the bank -- when the pile grows, bump them here by hand. */
+  var LEDGER_LINES = '5,000+', LEDGER_MEMES = '70+';
+  el.ledger.innerHTML = '<b>' + LEDGER_LINES + '</b> lines &nbsp;·&nbsp; <b>' +
+    LEDGER_MEMES + '</b> memes&nbsp;&nbsp;—&nbsp;&nbsp;pick your poison! <span class="heart">♡</span>';
   if (el.built) el.built.textContent = BANK.built;
 
   // one line on arrival, a beat after paint so the shuffle reads as the page
