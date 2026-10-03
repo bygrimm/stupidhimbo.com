@@ -122,11 +122,6 @@
     return pick;
   }
 
-  /* The drawers, in the order a scene brief would introduce them. A one-line
-     hand only ever needs the pick itself; this order is what the credit row
-     and the filters are named from. */
-  var ORDER = ['setting', 'action', 'shippy', 'dialogue'];
-
   function deal() {
     var list = pool();
     if (!list.length) return;
