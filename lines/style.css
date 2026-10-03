@@ -182,7 +182,6 @@ body::before {
   color: var(--text-faint);
   flex: 0 0 6.4rem;
 }
-.row-body { flex: 1 1 auto; min-width: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 0.3rem 0.15rem; }
 
 .chip {
@@ -217,13 +216,6 @@ body::before {
 .chip[disabled]::before,
 .chip[disabled]::after { color: #333830; }
 .chip[disabled]::after { content: ' ]\00a0 off'; color: #3a3f38; letter-spacing: 0.06em; }
-
-/* that "off" tag belongs to the sinday gate. inside a dimmed row every chip is
-   disabled at once and the tag would smear across all six, meaning nothing. */
-.chips.is-dim .chip[disabled]::after { content: ' ]'; }
-/* let the row carry the dimming on its own, rather than stacking with the
-   per-chip fade and leaving the text unreadable */
-.chips.is-dim .chip[disabled] { opacity: 1; }
 
 .row-mature { align-items: center; margin-bottom: 1.1rem; }
 .check {
@@ -349,20 +341,6 @@ body::before {
 .cmd-quiet:hover::before,
 .cmd-quiet:hover::after { color: var(--accent); }
 .cmd-quiet:disabled { opacity: 0.4; cursor: default; }
-
-/* past one line the dealer composes the drawers itself, so the filter row
-   goes quiet rather than sitting there claiming to do something */
-.chips.is-dim { opacity: 0.62; filter: saturate(0.45); }
-.chips.is-dim .chip { cursor: default; }
-/* sits directly under the chips inside the draw-from block, so proximity says
-   which row it belongs to -- floated to the right it read as a caption for
-   "hand size" instead */
-.hand-note {
-  display: block;
-  margin-top: 0.4rem;
-  font-style: italic;
-  letter-spacing: 0.02em;
-}
 .cmd-quiet:disabled:hover {
   background: none;
   border-color: var(--card-border);
@@ -459,44 +437,6 @@ body::before {
 }
 .credit-meta a:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
 
-/* a hand draws from several memes now, so each line is credited where it
-   stands -- numbered to match the lines above */
-.credit-list {
-  list-style: none;
-  counter-reset: src;
-  margin: 0.2rem 0 0;
-  padding: 0;
-}
-.credit-list li {
-  counter-increment: src;
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  font-family: var(--mono-font);
-  font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  line-height: 1.9;
-  color: var(--text-faint);
-}
-.credit-list li::before {
-  content: counter(src, decimal-leading-zero);
-  min-width: 1.3rem;
-  flex-shrink: 0;
-  opacity: 0.55;
-  font-style: italic;
-}
-.credit-list .cn {
-  color: var(--text-dim);
-  text-decoration: none;
-  border-bottom: 1px solid var(--card-border);
-}
-.credit-list .cn:hover { color: var(--accent-lit); border-bottom-color: var(--accent); }
-.credit-list .cm {
-  margin-left: auto;
-  padding-left: 0.7rem;
-  flex-shrink: 0;
-  opacity: 0.8;
-}
 .credit-note {
   margin-top: 0.5rem;
   font-family: var(--mono-font);

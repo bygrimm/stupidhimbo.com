@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ohisms — the pile</title>
-<meta name="description" content="every dialogue prompt posted on ohisms, dealt at random.">
+<meta name="description" content="every prompt line posted on ohisms — dialogue, action, setting, shippy and lyric — dealt one at a time.">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -25,15 +25,7 @@
 
     <div class="row">
       <span class="label">draw from</span>
-      <div class="row-body">
-        <div class="chips" id="chips" role="group" aria-label="filter by meme type"></div>
-        <span class="note hand-note" id="cat-note" hidden>the hand picks these</span>
-      </div>
-    </div>
-
-    <div class="row">
-      <span class="label">hand size</span>
-      <div class="chips" id="sizes" role="group" aria-label="how many lines"></div>
+      <div class="chips" id="chips" role="group" aria-label="filter by meme type"></div>
     </div>
 
     <div class="row row-mature">
@@ -56,7 +48,7 @@
   <section class="stage" aria-label="drawn lines">
     <article class="post" id="post">
       <ol class="lines" id="lines" aria-live="polite">
-        <li class="idle">↺&nbsp;&nbsp;hit <em>draw</em> and i'll deal you a hand out of the pile.</li>
+        <li class="idle">↺&nbsp;&nbsp;hit <em>draw</em> and i'll deal you a line out of the pile.</li>
       </ol>
       <div class="credit" id="credit" hidden></div>
     </article>
@@ -76,7 +68,7 @@
 </main>
 
 <noscript>
-  <p class="noscript">this page deals hands with javascript,&nbsp;&nbsp;which your browser has switched off.&nbsp;&nbsp;the whole pile is still readable as <a href="bank.js">bank.js</a>.</p>
+  <p class="noscript">this page draws with javascript,&nbsp;&nbsp;which your browser has switched off.&nbsp;&nbsp;the whole pile is still readable as <a href="bank.js">bank.js</a>.</p>
 </noscript>
 
 <script src="bank.js"></script>

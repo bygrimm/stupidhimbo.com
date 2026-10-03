@@ -23,13 +23,9 @@
     ['lyric',    'lyrics'],
     ['sinday',   'sinday']
   ];
-  var SIZES = [1, 2, 3];
-
   var el = {
     chips:   document.getElementById('chips'),
-    sizes:   document.getElementById('sizes'),
     mature:  document.getElementById('mature'),
-    catNote: document.getElementById('cat-note'),
     deal:    document.getElementById('deal'),
     copy:    document.getElementById('copy'),
     copyLabel: document.querySelector('#copy .cmd-text'),
@@ -43,7 +39,6 @@
 
   var state = {
     cat: 'all',
-    size: 1,
     mature: false,
     drawn: [],       // [{li, text, src, post, flags}]
     seen: [],        // recent draws, newest first
@@ -127,90 +122,27 @@
     return pick;
   }
 
-  /* The drawers, in the order a scene brief would introduce them: where we are,
-     what happens, the kiss, what gets said. ORDER is only for sorting a hand;
-     BRIEF is what a three-line hand always is. */
+  /* The drawers, in the order a scene brief would introduce them. A one-line
+     hand only ever needs the pick itself; this order is what the credit row
+     and the filters are named from. */
   var ORDER = ['setting', 'action', 'shippy', 'dialogue'];
-  var BRIEF = ['setting', 'action', 'dialogue'];
-  /* Two lines are cut from a short menu instead of drawn free. A shippy line is
-     already a whole scene -- "[ S ] kisses [ R ] in the dressing room" names its
-     own place -- so it is never paired with a setting. Two locations fighting
-     for the same hand was the whole bug. */
-  var PAIRS = [
-    ['setting', 'dialogue'],
-    ['setting', 'action'],
-    ['action',  'dialogue'],
-    ['shippy',  'dialogue']
-  ];
 
   function deal() {
     var list = pool();
     if (!list.length) return;
 
     var avoid = state.exhausted[state.cat] || (state.exhausted[state.cat] = {});
-    var hand = [], buckets = {};
+    var hand = [];
 
-    // bucket what's eligible so a hand can be composed drawer by drawer
-    list.forEach(function (i) {
-      var c = SRC[LINES[i][1]].c;
-      (buckets[c] = buckets[c] || []).push(i);
-    });
-
-    // grabbing a line trades off in order: right drawer, then a meme this hand
-    // hasn't used, then a line we haven't already served. relaxing in that
-    // order means a hand never repeats a meme while an unused one is sitting
-    // there -- which is what happened when a single drawer was selected.
-    var usedSrc = {};
-    function grab(cat) {
-      var tries = [
-        function (i) { return SRC[LINES[i][1]].c === cat && !usedSrc[LINES[i][1]] && !avoid[i]; },
-        function (i) { return SRC[LINES[i][1]].c === cat && !usedSrc[LINES[i][1]]; },
-        function (i) { return SRC[LINES[i][1]].c === cat && !avoid[i]; },
-        function (i) { return SRC[LINES[i][1]].c === cat; }
-      ];
-      for (var t = 0; t < tries.length; t++) {
-        var bag = list.filter(tries[t]);
-        if (bag.length) {
-          var pick = bag[Math.floor(Math.random() * bag.length)];
-          usedSrc[LINES[pick][1]] = 1;
-          avoid[pick] = 1;
-          return makeRec(pick);
-        }
-      }
-      return null;
+    // one line, one pick -- prefer something this session hasn't already
+    // served, and if the drawer is nearly spent, reshuffle rather than repeat
+    if (Object.keys(avoid).length > list.length * 0.85) {
+      state.exhausted[state.cat] = {};
+      avoid = state.exhausted[state.cat];
     }
-
-    if (state.size > 1) {
-      // two lines cut from the pair list, three the whole brief; either way
-      // each line comes out of its own meme, which is the point.
-      var seq = state.size === 2 ? PAIRS[Math.floor(Math.random() * PAIRS.length)] : BRIEF;
-      seq = seq.filter(function (k) { return buckets[k] && buckets[k].length; })
-               .sort(function (a, b) { return ORDER.indexOf(a) - ORDER.indexOf(b); });
-      seq.forEach(function (k) {
-        if (hand.length >= state.size) return;
-        var r = grab(k);
-        if (r) hand.push(r);
-      });
-      // if a drawer came back empty, top up from the rest rather than deal short
-      var cur = 0, guard = 0;
-      while (hand.length < state.size && guard++ < 80) {
-        var r2 = grab(seq[cur % seq.length]);
-        cur++;
-        if (r2) hand.push(r2);
-      }
-    }
-
-    if (!hand.length) {
-      var want = state.size, guard3 = 0;
-      while (hand.length < want && guard3++ < 200) {
-        var li = drawOne(list, avoid);
-        if (!avoid[li]) { avoid[li] = 1; hand.push(makeRec(li)); }
-        else if (hand.length === 0 && guard3 > 150) hand.push(makeRec(li));
-      }
-    }
-
-    // a session that has seen everything gets a fresh shuffle
-    if (Object.keys(avoid).length > list.length * 0.85) state.exhausted[state.cat] = {};
+    var pick = drawOne(list, avoid);
+    avoid[pick] = 1;
+    hand.push(makeRec(pick));
 
     state.drawn = hand;
     render(true);
@@ -222,7 +154,6 @@
     if (!hand.length) return;
 
     var src = hand[0].src;
-    var mixed = hand.some(function (r) { return r.src !== src; });
 
     var html = '';
     hand.forEach(function (r, i) {
@@ -232,27 +163,11 @@
 
     // with the header gone the credit is where the meme names itself, so it
     // carries the grey letter ramp the titles used to have
-    var c;
-    if (mixed) {
-      // a hand now draws from several memes, so credit each line where it
-      // stands -- one label would only be true of the first line
-      c = '<div class="credit-name">' + rampTitle('a mixed hand') + '</div>' +
-          '<ol class="credit-list">';
-      hand.forEach(function (r) {
-        c += '<li>' +
-             '<a class="cn" href="https://ohisms.tumblr.com/post/' + r.post +
-               '" target="_blank" rel="noopener">' + esc(r.src.n) + ' ↗</a>' +
-             '<span class="cm">' + esc(catWord(r.src.c)) + ' &middot; ' + fmtDate(r.src.d) + '</span>' +
-             '</li>';
-      });
-      c += '</ol>';
-    } else {
-      c = '<div class="credit-name">' + rampTitle(src.n) + '</div>' +
-          '<div class="credit-meta">' + esc(catWord(src.c)) +
-          ' &nbsp;·&nbsp; ' + fmtDate(src.d) + ' &nbsp;·&nbsp; ' +
-          '<a href="https://ohisms.tumblr.com/post/' + hand[0].post +
-          '" target="_blank" rel="noopener">the original post ↗</a></div>';
-    }
+    var c = '<div class="credit-name">' + rampTitle(src.n) + '</div>' +
+            '<div class="credit-meta">' + esc(catWord(src.c)) +
+            ' &nbsp;·&nbsp; ' + fmtDate(src.d) + ' &nbsp;·&nbsp; ' +
+            '<a href="https://ohisms.tumblr.com/post/' + hand[0].post +
+            '" target="_blank" rel="noopener">the original post ↗</a></div>';
     if (hand.some(function (r) { return r.flags & FLAG_SLOTS; })) {
       c += '<div class="credit-note">[ s ] speaks&nbsp;&nbsp;·&nbsp;&nbsp;[ r ] listens&nbsp;&nbsp;·&nbsp;&nbsp;swap them to taste</div>';
     }
@@ -331,24 +246,14 @@
       return '<button class="chip" data-cat="' + key + '" aria-pressed="' +
         (key === state.cat) + '">' + pair[1] + '<span class="tally">' + num(n) + '</span></button>';
     }).join('');
-
-    el.sizes.innerHTML = SIZES.map(function (n) {
-      return '<button class="chip" data-size="' + n + '" aria-pressed="' + (n === state.size) +
-        '">' + (n === 1 ? 'one line' : n + ' lines') + '</button>';
-    }).join('');
   }
 
   function syncChips() {
-    // The filter row only means anything for a single line. Past that the hand
-    // is a set menu, so the row dims and goes inert instead of staying live and
-    // implying it still steers the draw.
-    var dim = state.size > 1;
-    el.chips.classList.toggle('is-dim', dim);
-    if (el.catNote) el.catNote.hidden = !dim;
+    // the only chip that can be dead is sinday, until the gate is on
     el.chips.querySelectorAll('.chip').forEach(function (c) {
       var key = c.getAttribute('data-cat');
       var gated = key === 'sinday' && !state.mature;
-      c.disabled = dim || gated;
+      c.disabled = gated;
       if (c.disabled && state.cat === key) setCat('all');
     });
   }
@@ -361,23 +266,10 @@
     remember();
   }
 
-  function setSize(n) {
-    state.size = n;
-    el.sizes.querySelectorAll('.chip').forEach(function (c) {
-      c.setAttribute('aria-pressed', String(+c.getAttribute('data-size') === n));
-    });
-    // a hand of several is composed by the dealer, so any drawer filter drops
-    if (n > 1) setCat('all');
-    syncChips();
-    remember();
-  }
-
   function remember() {
     if (!history.replaceState) return;
     var q = [];
-    // the drawer only travels in the url when it still applies to the deal
-    if (state.cat !== 'all' && state.size === 1) q.push('cat=' + state.cat);
-    if (state.size !== 1) q.push('n=' + state.size);
+    if (state.cat !== 'all') q.push('cat=' + state.cat);
     if (state.mature) q.push('mature=1');
     try { history.replaceState(null, '', q.length ? '?' + q.join('&') : location.pathname); } catch (e) {}
   }
@@ -385,28 +277,18 @@
   function restore() {
     var q = new URLSearchParams(location.search);
     if (q.get('mature') === '1' && hasMature()) { state.mature = true; el.mature.setAttribute('aria-checked', 'true'); }
-    var n = parseInt(q.get('n'), 10);
-    if (SIZES.indexOf(n) > -1) state.size = n;
     var c = q.get('cat');
     if (c && CATS.some(function (p) { return p[0] === c; })) state.cat = c;
-    // a drawer in the url can't apply to a set-menu hand, so it's dropped
-    if (state.size > 1) state.cat = 'all';
   }
 
   /* ── clipboard ───────────────────────────────────────────────────── */
   function asText() {
     var hand = state.drawn;
     if (!hand.length) return '';
-    var mixed = hand.some(function (r) { return r.src !== hand[0].src; });
-    var out = [mixed ? '✱ ˚｡⋆ ↪ a mixed hand' : '✱ ˚｡⋆ ↪ ' + hand[0].src.n.toUpperCase(), ''];
-    hand.forEach(function (r, i) {
-      out.push((i + 1 < 10 ? '0' : '') + (i + 1) + '. ' + r.text);
-      // name the meme per line, the way the page credits it
-      if (mixed) out.push('      — ' + r.src.n.toLowerCase());
-    });
-    out.push('');
-    out.push('( pulled from ohisms.tumblr.com — est. 2016 )');
-    return out.join('\n');
+    // one line: hand over the line itself, then name where it came from
+    return hand[0].text + '\n' +
+           '— ' + hand[0].src.n.toLowerCase() + '\n\n' +
+           '( pulled from ohisms.tumblr.com — est. 2016 )';
   }
 
   function copy() {
@@ -465,13 +347,6 @@
     deal();
   });
 
-  el.sizes.addEventListener('click', function (e) {
-    var b = e.target.closest('.chip');
-    if (!b) return;
-    setSize(+b.getAttribute('data-size'));
-    deal();
-  });
-
   el.mature.addEventListener('click', function () {
     state.mature = !state.mature;
     el.mature.setAttribute('aria-checked', String(state.mature));
@@ -515,9 +390,6 @@
   restore();
   buildChips();
   syncChips();
-  el.sizes.querySelectorAll('.chip').forEach(function (c) {
-    c.setAttribute('aria-pressed', String(+c.getAttribute('data-size') === state.size));
-  });
 
   var total = LINES.length;
   el.ledger.innerHTML = '<b>' + num(total) + '</b> lines &nbsp;·&nbsp; <b>' + num(SRC.length) +
