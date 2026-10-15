@@ -1,0 +1,22 @@
+@import url('../randomizer/style.css?v=20261003e');
+.sheet { max-width: 780px; }
+a { color: var(--accent-lit); text-underline-offset: .22em; }
+a:hover { color: var(--text); }
+a:focus-visible { outline: 2px solid var(--accent-lit); outline-offset: 5px; }
+::selection { background: var(--accent); color: var(--bg); }
+.intro { padding: 1.7rem 0; }
+.intro p + p { margin-top: .9rem; }
+.status { color: var(--accent-lit); font-family: var(--mono-font); font-size: .75rem; }
+.waiting { border: 1px dashed var(--text-faint); padding: 2rem 1.5rem; margin: 0 0 1.5rem; }
+.waiting h2, .policy h2 { font-size: 1.05rem; font-weight: 600; color: var(--text); }
+.waiting p { color: var(--text-muted); margin-top: .65rem; }
+.actions { display:flex; flex-wrap:wrap; gap:.7rem; }
+.actions a { text-decoration:none; min-height:44px; }
+.actions .cmd-text { padding: 0 .4rem; }
+.foot a { color:var(--accent-lit); }
+.policy section { margin-top: 1.7rem; }
+.policy p, .policy li { margin-top: .6rem; }
+.policy ul { padding-left: 1.3rem; }
+.policy { padding-bottom:1.8rem; font-size:1rem; overflow-wrap:anywhere; }
+.policy .updated { color:var(--text-muted); font-family:var(--mono-font); font-size:.7rem; margin-top:1.3rem; }
+@media(max-width:520px) { .masthead .title { font-size:clamp(2rem,9vw,3.1rem); } .waiting { padding:1.3rem 1rem; } }
