@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#0a0a0a">
   <title>stupid himbo — grimm's corner ♡</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=20261106-directory">
+  <link rel="stylesheet" href="style.css?v=20261106-audio">
+  <script src="player.js" defer></script>
 </head>
 <body>
   <main class="card">
@@ -19,7 +20,7 @@
     </header>
 
     <section class="blogs" aria-labelledby="blogs-heading">
-      <div class="section-heading"><h2 id="blogs-heading">blogs</h2><a class="status-link" href="https://status.stupidhimbo.com/">check activity <span aria-hidden="true">↗</span></a></div>
+      <div class="section-heading"><h2 id="blogs-heading">blogs</h2><a class="status-link" href="https://status.stupidhimbo.com/">full blogroll <span aria-hidden="true">↗</span></a></div>
       <ul class="directory blog-grid">
       <li class="directory-item "><a href="https://www.tumblr.com/erotyik" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">E</span>ROTYIK</span><span class="muse-text">juniper castro</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
       <li class="directory-item "><a href="https://gospul.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">G</span>OSPUL</span><span class="muse-text">cecily noväk</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
@@ -27,16 +28,33 @@
       <li class="directory-item "><a href="https://iconik.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">I</span>CONIK</span><span class="muse-text">denali delacruz</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
       <li class="directory-item multimuse"><a href="https://ensane.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">E</span>NSANE</span><span class="muse-text">oc multimuse</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
       </ul>
-      <details class="shelf">
-        <summary>on the quieter side <span>hiatus &amp; semi-hiatus</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6 8 10 12 6"/></svg></summary>
-        <ul class="directory shelf-grid">
-      <li class="directory-item "><a href="https://corpsight.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">C</span>ORPSIGHT</span><span class="muse-text">nora özgen</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
-      <li class="directory-item "><a href="https://godbrks.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">G</span>ODBRKS</span><span class="muse-text">wells stutler</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
-      <li class="directory-item "><a href="https://ekspose.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">E</span>KSPOSE</span><span class="muse-text">jade dubois</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
-      <li class="directory-item "><a href="https://forgde.tumblr.com" target="_blank" rel="noopener noreferrer"><span class="url-text"><span class="initial">F</span>ORGDE</span><span class="muse-text">finnick &amp; ollie</span><svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></a></li>
-        </ul>
-        <p class="shelf-note">jade, finnick &amp; ollie can be found at <a href="https://www.tumblr.com/ensane" target="_blank" rel="noopener noreferrer">ensane</a>.</p>
-      </details>
+    </section>
+
+    <section class="music" aria-labelledby="song-title">
+      <div class="song-heading"><span id="song-title">a little music</span><a href="https://www.youtube.com/watch?v=utBP093oWdk" target="_blank" rel="noopener noreferrer">youtube <span aria-hidden="true">↗</span></a></div>
+      <div class="song">
+        <img class="cover" src="images/idolize.jpg" alt="" width="480" height="360">
+        <div class="song-main">
+          <div class="song-name">IDOLIZE</div>
+          <div class="song-artist">dorian electra <span aria-hidden="true">·</span> slowed + reverb</div>
+          <div class="song-controls">
+            <button class="play-toggle" type="button" aria-label="Play Idolize" disabled>
+              <svg class="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 8 5-8 5Z"/></svg>
+              <svg class="pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z"/></svg>
+            </button>
+            <span class="time elapsed">0:00</span>
+            <input class="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Song position" disabled>
+            <span class="time duration">–:––</span>
+            <button class="mute-toggle" type="button" aria-label="Mute" disabled>
+              <svg class="volume-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8v4h3l4 3V5L6 8H3Zm9-1.5a5 5 0 0 1 0 7m2-9a8 8 0 0 1 0 11"/></svg>
+              <svg class="muted-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8v4h3l4 3V5L6 8H3Zm9 0 5 5m0-5-5 5"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="player-status" role="status">press play &amp; stay a while ♡</p>
+      <audio id="song-audio" src="audio/idolize-dorian-electra-slowed-reverb.mp3" preload="metadata"></audio>
+      <noscript><p class="player-status">enable javascript to play here, or listen on youtube above.</p></noscript>
     </section>
 
     <nav class="elsewhere" aria-labelledby="elsewhere-heading">
